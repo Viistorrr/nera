@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NERA · Neural Ecosystem & Repository Assistant",
-  description: "La inteligencia central del Negrooverso para proyectos, conocimiento y trazas.",
+  title: "NERA · La del Negrooverso",
+  description: "La inteligencia central del Negrooverso para proyectos, conocimiento y expansión creativa.",
 };
 
 const navItems = [
   { id: "01", label: "Dashboard", icon: LayoutDashboard },
-  { id: "02", label: "Projects", icon: FolderKanban },
+  { id: "02", label: "Proyectos", icon: FolderKanban },
   { id: "03", label: "AI_Lab", icon: FlaskConical },
   { id: "04", label: "Knowledge_Base", icon: BookText },
   { id: "05", label: "Logs", icon: ScrollText },
@@ -47,10 +47,10 @@ export default function RootLayout({
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-zinc-500">
-                    Core Intelligence
-                  </p>
                   <p className="text-lg font-semibold leading-none">NERA</p>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-zinc-500">
+                    La del Negrooverso
+                  </p>
                 </div>
               </div>
 
@@ -84,12 +84,11 @@ export default function RootLayout({
 
             <div className="mt-8 border-t border-white/5 pt-4 text-[11px] text-zinc-500">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-600">
-                Neural Ecosystem &amp; Repository Assistant
+                NERA Ecosistema &amp; Repositorio
               </p>
               <p className="mt-2 font-mono text-xs">
                 NERA v1.0.0{" "}
-                <span className="text-emerald-400">· Online</span>{" "}
-                <span className="text-zinc-400">/ Sobrio</span>
+                <span className="text-emerald-400">· Online</span>
               </p>
             </div>
           </aside>

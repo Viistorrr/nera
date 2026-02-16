@@ -90,20 +90,19 @@ export default function Home() {
         >
           <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.28em] text-zinc-400">
             <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.8)]" />
-            Sistema NERA · Estable
+            NERA · Estable
           </p>
 
           <h1 className="text-2xl font-semibold leading-tight sm:text-3xl md:text-[2.1rem]">
-            Bienvenido al Negrooverso.{" "}
+            Bienvenid@ a la{" "}
             <span className="bg-gradient-to-r from-[#D4AF37] via-zinc-50 to-[#D4AF37] bg-clip-text text-transparent">
-              Operando al 100% de presencia.
+              enciclopedia del negrooverso 
             </span>
           </h1>
 
           <p className="text-sm text-zinc-400">
             Neural Ecosystem &amp; Repository Assistant coordinando proyectos, conocimiento y
-            trazas de tu universo creativo. Todo lo que pasa en fornegros.com, visto desde el
-            núcleo.
+            trazas de tu universo creativo. Toda una herramienta central construyendo identidad, conocimiento y educación.
           </p>
         </motion.div>
       </header>
