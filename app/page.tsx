@@ -1,8 +1,14 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { BrainCircuit, Search, Sparkles } from "lucide-react";
+
+const WorldMap3D = dynamic(
+  () => import("./components/WorldMap3D").then((m) => m.WorldMap3D),
+  { ssr: false, loading: () => <div className="h-[320px] animate-pulse rounded-2xl border border-white/10 bg-white/5" /> }
+);
 
 const knowledgeCards = [
   {
@@ -106,6 +112,15 @@ export default function Home() {
           </p>
         </motion.div>
       </header>
+
+      <motion.section
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.08 }}
+        className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-[0_0_60px_rgba(0,0,0,0.4)] sm:mt-10"
+      >
+        <WorldMap3D className="h-[320px] w-full sm:h-[380px] md:h-[420px]" />
+      </motion.section>
 
       <section className="mt-8 flex flex-1 flex-col gap-4 sm:mt-10 sm:gap-6 lg:mt-12">
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
