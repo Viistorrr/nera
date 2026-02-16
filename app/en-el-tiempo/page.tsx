@@ -91,7 +91,7 @@ export default function EnElTiempoPage() {
             <div className="flex items-center gap-1.5 border-b border-white/5 px-3 py-2">
               <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
               <h2 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-100">
-                Efemérides del mes
+                Efemérides
               </h2>
             </div>
             <ul className="divide-y divide-white/5 max-h-[320px] overflow-y-auto">

@@ -72,7 +72,7 @@ export default function Home() {
           <input
             autoFocus
             type="text"
-            placeholder="Ask NERA..."
+            placeholder="preguntale a NERA..."
             className="w-full rounded-full border border-white/10 bg-black/60 px-4 py-3 pl-10 pr-24 text-sm text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] outline-none ring-0 placeholder:text-zinc-600 transition focus:border-[#D4AF37]/60 focus:bg-black/80"
           />
 

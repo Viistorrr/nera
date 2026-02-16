@@ -7,6 +7,7 @@ import {
   BookText,
   Calendar,
   FlaskConical,
+  Gamepad2,
   LayoutDashboard,
   Menu,
   ScrollText,
@@ -15,10 +16,11 @@ import {
 
 const navItems = [
   { id: "01", label: "Dashboard", icon: LayoutDashboard, href: "/" },
-  { id: "02", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
-  { id: "03", label: "AI_Lab", icon: FlaskConical },
-  { id: "04", label: "Knowledge_Base", icon: BookText },
-  { id: "05", label: "Logs", icon: ScrollText },
+  { id: "02", label: "Interactiva", icon: Gamepad2, href: "/interactiva" },
+  { id: "03", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
+  { id: "04", label: "AI_Lab", icon: FlaskConical },
+  { id: "05", label: "Knowledge_Base", icon: BookText },
+  { id: "06", label: "Logs", icon: ScrollText },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -99,7 +101,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {navItems.map((item) => {
               const Icon = item.icon;
               const href = "href" in item ? item.href : undefined;
-              const isActive = href ? pathname === href : false;
+              const isActive = href
+                ? pathname === href || (href !== "/" && pathname.startsWith(href + "/"))
+                : false;
 
               const baseClass =
                 "group flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition " +
@@ -115,9 +119,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     onClick={closeMenu}
                     className={baseClass}
                   >
-                    <span className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 group-hover:text-[#D4AF37]">
-                      {item.id}
-                    </span>
                     <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37]" />
                     <span className="text-xs font-medium tracking-wide">
                       {item.label}
@@ -133,9 +134,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   onClick={closeMenu}
                   className={baseClass}
                 >
-                  <span className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 group-hover:text-[#D4AF37]">
-                    {item.id}
-                  </span>
                   <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37]" />
                   <span className="text-xs font-medium tracking-wide">
                     {item.label}
