@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   BookText,
+  Calendar,
   FlaskConical,
-  FolderKanban,
   LayoutDashboard,
   Menu,
   ScrollText,
@@ -12,8 +14,8 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { id: "01", label: "Dashboard", icon: LayoutDashboard },
-  { id: "02", label: "Proyectos", icon: FolderKanban },
+  { id: "01", label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { id: "02", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
   { id: "03", label: "AI_Lab", icon: FlaskConical },
   { id: "04", label: "Knowledge_Base", icon: BookText },
   { id: "05", label: "Logs", icon: ScrollText },
@@ -21,6 +23,7 @@ const navItems = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -95,18 +98,40 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <nav className="mt-6 space-y-1 text-sm lg:mt-0">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isPrimary = item.id === "01";
+              const href = "href" in item ? item.href : undefined;
+              const isActive = href ? pathname === href : false;
+
+              const baseClass =
+                "group flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition " +
+                (isActive
+                  ? "border-[#D4AF37]/40 bg-[#D4AF37]/5 text-zinc-50 shadow-[0_0_30px_rgba(212,175,55,0.15)]"
+                  : "border-white/5 bg-white/0 text-zinc-400 hover:border-[#D4AF37]/40 hover:bg-white/5 hover:text-zinc-50");
+
+              if (href) {
+                return (
+                  <Link
+                    key={item.id}
+                    href={href}
+                    onClick={closeMenu}
+                    className={baseClass}
+                  >
+                    <span className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 group-hover:text-[#D4AF37]">
+                      {item.id}
+                    </span>
+                    <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37]" />
+                    <span className="text-xs font-medium tracking-wide">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              }
 
               return (
                 <button
                   key={item.id}
                   type="button"
                   onClick={closeMenu}
-                  className={`group flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition ${
-                    isPrimary
-                      ? "border-[#D4AF37]/40 bg-[#D4AF37]/5 text-zinc-50 shadow-[0_0_30px_rgba(212,175,55,0.15)]"
-                      : "border-white/5 bg-white/0 text-zinc-400 hover:border-[#D4AF37]/40 hover:bg-white/5 hover:text-zinc-50"
-                  }`}
+                  className={baseClass}
                 >
                   <span className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 group-hover:text-[#D4AF37]">
                     {item.id}
