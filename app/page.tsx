@@ -107,10 +107,10 @@ export default function Home() {
         </motion.div>
       </header>
 
-      <section className="mt-10 flex flex-1 flex-col gap-6 lg:mt-12">
+      <section className="mt-8 flex flex-1 flex-col gap-4 sm:mt-10 sm:gap-6 lg:mt-12">
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-          <div>
-            <p className="text-[11px] font-mono uppercase tracking-[0.32em] text-zinc-500">
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.24em] sm:tracking-[0.32em] text-zinc-500">
               Knowledge_Base
             </p>
             <p className="mt-1 text-xs text-zinc-500">
@@ -118,15 +118,15 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-zinc-300">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] sm:text-[11px] text-zinc-300 shrink-0">
             <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
-            <span className="font-mono uppercase tracking-[0.24em]">
+            <span className="font-mono uppercase tracking-[0.18em] sm:tracking-[0.24em]">
               Semántica &amp; Memoria
             </span>
           </div>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {knowledgeCards.map((card, index) => (
             <motion.article
               key={card.id}
@@ -138,26 +138,26 @@ export default function Home() {
                 delay: 0.05 + index * 0.04,
               }}
               whileHover={{ y: -4 }}
-              className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-4 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55"
+              className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-4 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55 min-w-0"
             >
               <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100">
                 <div className="absolute -inset-32 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.16),_transparent_60%)]" />
               </div>
 
               <div className="relative flex items-start justify-between gap-3">
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3 min-w-0 flex-1">
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-2.5 py-1">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_14px_rgba(212,175,55,0.9)]" />
-                    <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-zinc-300">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.22em] text-zinc-300 truncate">
                       {card.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-semibold text-zinc-50">
+                  <h3 className="text-sm font-semibold text-zinc-50 line-clamp-2">
                     {card.title}
                   </h3>
 
-                  <p className="text-xs leading-relaxed text-zinc-400">
+                  <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
                     {card.description}
                   </p>
                 </div>
@@ -167,11 +167,11 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative mt-4 flex items-center justify-between text-[11px] text-zinc-400">
-                <p className="font-mono text-[10px] tracking-[0.18em] text-zinc-500">
+              <div className="relative mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
+                <p className="font-mono text-[10px] tracking-[0.14em] sm:tracking-[0.18em] text-zinc-500 truncate max-w-[70%]">
                   {card.meta}
                 </p>
-                <p className="font-mono text-[10px] tracking-[0.24em] text-[#D4AF37]/80">
+                <p className="font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.24em] text-[#D4AF37]/80 shrink-0">
                   HOVER_TO_FOCUS
                 </p>
               </div>
