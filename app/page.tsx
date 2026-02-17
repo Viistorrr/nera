@@ -117,9 +117,34 @@ export default function Home() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.08 }}
-        className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-[0_0_60px_rgba(0,0,0,0.4)] sm:mt-10"
+        className="mt-8 flex flex-col gap-6 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-4 shadow-[0_0_60px_rgba(0,0,0,0.4)] sm:mt-10 sm:p-6 lg:flex-row"
       >
-        <WorldMap3D className="h-[320px] w-full sm:h-[380px] md:h-[420px]" />
+        <div className="w-full lg:w-1/2">
+          <WorldMap3D className="h-[260px] w-full sm:h-[320px] md:h-[360px] lg:h-[380px]" />
+        </div>
+
+        <div className="flex w-full items-center lg:w-1/2">
+          <div className="space-y-3 text-left text-sm text-zinc-400">
+            <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-500">
+              Cartografía del Negrooverso
+            </p>
+            <h2 className="text-lg font-semibold text-zinc-100 sm:text-xl">
+              Mapa-mundi contextual
+            </h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              euismod, urna eu tincidunt consectetur, nisi nisl aliquet nisi,
+              euismod aliquam nisl nunc eu nisl. Suspendisse potenti. Proin
+              vehicula, justo at feugiat lobortis, urna lorem maximus nunc,
+              vitae volutpat lorem urna eu mi.
+            </p>
+            <p className="text-xs text-zinc-500">
+              Este texto se completará con la narrativa geográfica del
+              Negrooverso: conexiones entre África, Colombia, la costa
+              pacífica, el Caribe y Centroamérica.
+            </p>
+          </div>
+        </div>
       </motion.section>
 
       <section className="mt-8 flex flex-1 flex-col gap-4 sm:mt-10 sm:gap-6 lg:mt-12">

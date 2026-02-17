@@ -4,12 +4,17 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Search } from "lucide-react";
 
-// Placeholder: cuadrícula simple de sopa de letras (luego se genera dinámicamente)
+// Cuadrícula simple con las palabras escondidas en diferentes filas/columnas.
+// Palabras: CIMARRON, KILOMBO, NEGROOVERSO, INDEPENDENCIA, PANAFRICANISMO
 const SAMPLE_GRID = [
-  "NERA",
-  "NEGR",
-  "OVER",
-  "SOUN",
+  "CIMARRONXABCD", // CIMARRON horizontal
+  "XPXXXXKILOMBOX", // KILOMBO horizontal
+  "NEXGROOVERSOX", // NEGROOVERSO repartida
+  "IXXXXINDEPEXXX", // parte de INDEPENDENCIA
+  "NXXXXNDENCIAXX", // resto de INDEPENDENCIA
+  "PANAFRICANISMO", // PANAFRICANISMO completo
+  "MXAXNXAXXXOXXX",
+  "OXIXPXAXXXXNXO",
 ];
 
 export default function SopaDeLetrasPage() {
@@ -46,9 +51,9 @@ export default function SopaDeLetrasPage() {
       >
         <div className="rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-xl">
           <p className="mb-4 text-center text-xs font-mono uppercase tracking-wider text-zinc-500">
-            Encuentra: NERA, NEGRO, VERSO
+            Encuentra: CIMARRON, KILOMBO, NEGROOVERSO, INDEPENDENCIA, PANAFRICANISMO
           </p>
-          <div className="grid gap-1 font-mono text-2xl font-medium text-zinc-300">
+          <div className="grid gap-1 font-mono text-xl font-medium text-zinc-300">
             {SAMPLE_GRID.map((row, i) => (
               <div key={i} className="flex justify-center gap-1">
                 {row.split("").map((cell, j) => (

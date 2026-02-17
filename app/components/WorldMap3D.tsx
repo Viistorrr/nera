@@ -8,10 +8,10 @@ import type { Object3D } from "three";
 const GEOJSON_URL =
   "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_admin_0_countries.geojson";
 const EARTH_IMAGE =
-  "https://unpkg.com/three-globe@2/example/img/earth-night.jpg";
+  "https://unpkg.com/three-globe@2/example/img/earth-day.jpg";
 
 const HIGHLIGHT_COLOR = "#D4AF37";
-const DEFAULT_COLOR = "rgba(40,40,40,0.85)";
+const DEFAULT_COLOR = "rgba(155,155,155,0.9)";
 
 // Costa pacífica de Colombia (aproximada): puntos desde norte hacia sur
 const PACIFIC_COAST_PATH = [
