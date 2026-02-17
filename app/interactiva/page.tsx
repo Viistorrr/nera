@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Gamepad2, Grid3X3, Layers, Search } from "lucide-react";
+import { Gamepad2, Grid3X3, Layers, Map, Search } from "lucide-react";
 
 const gameCards = [
   {
@@ -22,6 +22,15 @@ const gameCards = [
     description: "Crucigramas con experiencia 3D interactiva. Definiciones y pistas en el espacio.",
     meta: "WebGL · Inmersivo",
     icon: Layers,
+  },
+  {
+    id: "laberinto",
+    slug: "laberinto",
+    badge: "Recorridos",
+    title: "Laberinto de estaciones",
+    description: "Avanza por estaciones temáticas: Historia, Despertar, Independencia.",
+    meta: "Identidad · Pistas",
+    icon: Map,
   },
   {
     id: "memoria",

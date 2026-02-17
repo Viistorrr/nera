@@ -98,7 +98,7 @@ export default function CrucigramasPage() {
             Palabras: CIMARRON · KILOMBO · NEGROOVERSO · INDEPENDENCIA · PANAFRICANISMO
           </p>
           <div className="mx-auto max-w-full overflow-x-auto">
-            <div className="inline-grid grid-cols-[repeat(15,1.9rem)] gap-[0.15rem] sm:grid-cols-[repeat(15,2rem)]">
+            <div className="inline-grid grid-cols-[repeat(15,1.8rem)] gap-[0.12rem] sm:grid-cols-[repeat(15,2rem)]">
               {SOLUTION_GRID.map((row, rowIndex) =>
                 row.split("").map((ch, colIndex) => {
                   const isBlock = ch === "#";
@@ -106,7 +106,7 @@ export default function CrucigramasPage() {
                     return (
                       <div
                         key={`${rowIndex}-${colIndex}`}
-                        className="h-7 w-7 sm:h-8 sm:w-8 rounded-[0.35rem] bg-zinc-900/90"
+                        className="h-7 w-7 rounded-[0.35rem] bg-zinc-900/90 sm:h-8 sm:w-8"
                       />
                     );
                   }
@@ -122,7 +122,7 @@ export default function CrucigramasPage() {
                         handleChange(rowIndex, colIndex, e.target.value)
                       }
                       maxLength={1}
-                      className={`h-7 w-7 sm:h-8 sm:w-8 rounded-[0.35rem] border bg-black/60 text-center text-sm font-semibold uppercase text-zinc-100 outline-none transition focus:border-[#D4AF37]/60 focus:bg-black/80 ${
+                      className={`h-7 w-7 rounded-[0.35rem] border bg-black/60 text-center text-xs font-semibold uppercase text-zinc-100 outline-none transition focus:border-[#D4AF37]/60 focus:bg-black/80 sm:h-8 sm:w-8 sm:text-sm ${
                         value
                           ? correct
                             ? "border-emerald-500/70"
