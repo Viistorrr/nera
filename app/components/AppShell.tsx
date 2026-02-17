@@ -5,12 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookText,
+  BriefcaseBusiness,
   Calendar,
   FlaskConical,
   Gamepad2,
   LayoutDashboard,
   Menu,
-  ScrollText,
   X,
 } from "lucide-react";
 
@@ -18,9 +18,14 @@ const navItems = [
   { id: "01", label: "Dashboard", icon: LayoutDashboard, href: "/" },
   { id: "02", label: "Interactiva", icon: Gamepad2, href: "/interactiva" },
   { id: "03", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
-  { id: "04", label: "AI_Lab", icon: FlaskConical },
-  { id: "05", label: "Knowledge_Base", icon: BookText },
-  { id: "06", label: "Logs", icon: ScrollText },
+  {
+    id: "04",
+    label: "Marketplace de Servicios",
+    icon: BriefcaseBusiness,
+    href: "/marketplace",
+  },
+  { id: "05", label: "AI_Lab", icon: FlaskConical },
+  { id: "06", label: "Knowledge_Base", icon: BookText },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

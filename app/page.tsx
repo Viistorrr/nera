@@ -2,64 +2,20 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { BrainCircuit, Search, Sparkles } from "lucide-react";
+import { knowledgeCards } from "./data/nodes";
 
 const WorldMap3D = dynamic(
   () => import("./components/WorldMap3D").then((m) => m.WorldMap3D),
-  { ssr: false, loading: () => <div className="h-[320px] animate-pulse rounded-2xl border border-white/10 bg-white/5" /> }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] w-full animate-pulse rounded-2xl border border-white/10 bg-white/5 sm:h-[320px] md:h-[360px] lg:h-[380px]" />
+    ),
+  }
 );
-
-const knowledgeCards = [
-  {
-    id: "kb-01",
-    badge: "Atlas Conceptual",
-    title: "Mapa semántico del Negrooverso",
-    description:
-      "Núcleo de conceptos, entidades y relaciones que estructuran el ecosistema creativo y técnico.",
-    meta: "128 nodos · 432 relaciones activas",
-  },
-  {
-    id: "kb-02",
-    badge: "Playbooks",
-    title: "Protocolos de despliegue y experimentación",
-    description:
-      "Recetarios operativos para mover código, datos y modelos entre entornos sin perder contexto.",
-    meta: "24 flujos · 6 entornos conectados",
-  },
-  {
-    id: "kb-03",
-    badge: "Context Streams",
-    title: "Historial inteligente de repositorios",
-    description:
-      "Línea de tiempo curada de commits, decisiones de diseño y eventos clave por proyecto.",
-    meta: "∞ trazas · indexación incremental",
-  },
-  {
-    id: "kb-04",
-    badge: "Ontologías",
-    title: "Lenguajes compartidos entre humanos y modelos",
-    description:
-      "Definiciones precisas para que NERA hable el mismo idioma que tu ecosistema.",
-    meta: "37 dominios · 12 taxonomías activas",
-  },
-  {
-    id: "kb-05",
-    badge: "Knowledge Capsules",
-    title: "Paquetes portables de conocimiento",
-    description:
-      "Unidades autocontenidas con contexto, código y samples listos para ser inyectados en modelos.",
-    meta: "56 cápsulas · 9 colecciones",
-  },
-  {
-    id: "kb-06",
-    badge: "Field Logs",
-    title: "Bitácoras de experimentos y sesiones",
-    description:
-      "Registro estructurado de conversaciones, prompts y resultados que vale la pena recordar.",
-    meta: "En vivo · logging asistido",
-  },
-];
 
 export default function Home() {
   return (
@@ -168,54 +124,55 @@ export default function Home() {
 
         <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {knowledgeCards.map((card, index) => (
-            <motion.article
-              key={card.id}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.4,
-                ease: "easeOut",
-                delay: 0.05 + index * 0.04,
-              }}
-              whileHover={{ y: -4 }}
-              className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-4 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55 min-w-0"
-            >
-              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100">
-                <div className="absolute -inset-32 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.16),_transparent_60%)]" />
-              </div>
+            <Link key={card.id} href={`/nodo/${card.id}`}>
+              <motion.article
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  ease: "easeOut",
+                  delay: 0.05 + index * 0.04,
+                }}
+                whileHover={{ y: -4 }}
+                className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-4 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55 min-w-0"
+              >
+                <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100">
+                  <div className="absolute -inset-32 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.16),_transparent_60%)]" />
+                </div>
 
-              <div className="relative flex items-start justify-between gap-3">
-                <div className="space-y-2 sm:space-y-3 min-w-0 flex-1">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-2.5 py-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_14px_rgba(212,175,55,0.9)]" />
-                    <span className="text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.22em] text-zinc-300 truncate">
-                      {card.badge}
-                    </span>
+                <div className="relative flex items-start justify-between gap-3">
+                  <div className="space-y-2 sm:space-y-3 min-w-0 flex-1">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-2.5 py-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_14px_rgba(212,175,55,0.9)]" />
+                      <span className="text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.22em] text-zinc-300 truncate">
+                        {card.badge}
+                      </span>
+                    </div>
+
+                    <h3 className="text-sm font-semibold text-zinc-50 line-clamp-2">
+                      {card.title}
+                    </h3>
+
+                    <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
+                      {card.description}
+                    </p>
                   </div>
 
-                  <h3 className="text-sm font-semibold text-zinc-50 line-clamp-2">
-                    {card.title}
-                  </h3>
+                  <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black/70 text-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.45)]">
+                    <BrainCircuit className="h-4 w-4" />
+                  </div>
+                </div>
 
-                  <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
-                    {card.description}
+                <div className="relative mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
+                  <p className="font-mono text-[10px] tracking-[0.14em] sm:tracking-[0.18em] text-zinc-500 truncate max-w-[70%]">
+                    {card.meta}
+                  </p>
+                  <p className="font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.24em] text-[#D4AF37]/80 shrink-0">
+                    VER_DETALLE
                   </p>
                 </div>
-
-                <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black/70 text-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.45)]">
-                  <BrainCircuit className="h-4 w-4" />
-                </div>
-              </div>
-
-              <div className="relative mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
-                <p className="font-mono text-[10px] tracking-[0.14em] sm:tracking-[0.18em] text-zinc-500 truncate max-w-[70%]">
-                  {card.meta}
-                </p>
-                <p className="font-mono text-[10px] tracking-[0.18em] sm:tracking-[0.24em] text-[#D4AF37]/80 shrink-0">
-                  HOVER_TO_FOCUS
-                </p>
-              </div>
-            </motion.article>
+              </motion.article>
+            </Link>
           ))}
         </div>
       </section>
