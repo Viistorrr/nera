@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "./components/AppShell";
+import Script from "next/script";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -28,6 +29,15 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${geistMono.variable} antialiased bg-[#1a1a1a] text-zinc-100`}
       >
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-VR93V6T75P" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-VR93V6T75P');
+          `}
+          </Script>
         <AppShell>{children}</AppShell>
       </body>
     </html>
