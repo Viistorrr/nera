@@ -21,33 +21,68 @@ type WordDefinition = {
 
 const WORDS: WordDefinition[] = [
   {
-    word: "CIMARRON",
-    definition: "Persona esclavizada que escapó para construir comunidades libres",
-    explanation: "El término cimarrón se refiere a las personas esclavizadas que escapaban de sus captores para formar comunidades autónomas. Esta práctica de resistencia fue fundamental en la construcción de identidades afrodescendientes en América Latina, especialmente en Colombia donde San Basilio de Palenque es el primer pueblo libre de América.",
+    word: "CIMARRONAJE",
+    definition: "Resistencia de esclavizados que escaparon",
+    explanation: "El cimarronaje fue una forma de resistencia activa donde personas esclavizadas escapaban de sus captores para construir comunidades libres. Esta práctica histórica representa la lucha por la libertad y la autonomía, siendo fundamental en la construcción de identidades afrodescendientes en América Latina.",
+  },
+  {
+    word: "PALENQUE",
+    definition: "Comunidad de cimarrones libres",
+    explanation: "Los palenques fueron comunidades autónomas fundadas por cimarrones en territorios de difícil acceso. En Colombia, San Basilio de Palenque es el primer pueblo libre de América, declarado Patrimonio Inmaterial de la Humanidad. Representan la resistencia, la organización comunitaria y la preservación de tradiciones africanas.",
+  },
+  {
+    word: "QUILOMBO",
+    definition: "Comunidad de resistencia en Brasil",
+    explanation: "Los quilombos fueron comunidades de resistencia formadas por personas esclavizadas que escaparon en Brasil. El más conocido fue el Quilombo dos Palmares, que duró casi un siglo. Hoy, los quilombos contemporáneos son comunidades reconocidas que luchan por sus derechos territoriales y culturales.",
   },
   {
     word: "KILOMBO",
-    definition: "Comunidad de resistencia africana",
+    definition: "Comunidad de resistencia en África",
     explanation: "El kilombo es una organización social y militar de origen africano, especialmente en Angola. Representa la resistencia organizada y la capacidad de las comunidades africanas para defenderse y mantener su autonomía frente a la colonización y la esclavización.",
   },
   {
-    word: "NEGROOVERSO",
-    definition: "Ecosistema creativo y cultural del conocimiento negro",
-    explanation: "El Negrooverso es un ecosistema conceptual que integra historia, cultura, representación e identidad negra. Es un espacio de construcción de conocimiento, memoria y futuro desde las experiencias afrodescendientes, conectando genealogías africanas con procesos contemporáneos de resistencia y creación.",
-  },
-  {
-    word: "INDEPENDENCIA",
-    definition: "Proceso de liberación y autonomía",
-    explanation: "La independencia para las comunidades afrodescendientes no solo se refiere a fechas patrias, sino a procesos de liberación que incluyen palenques, quilombos y luchas por autonomía territorial, cultural y política. Es una práctica cotidiana de construcción de futuro propio.",
+    word: "DIÁSPORA",
+    definition: "Dispersión de pueblos africanos",
+    explanation: "La diáspora africana se refiere a la dispersión forzada de millones de africanos a través del Atlántico durante la trata transatlántica de esclavos. Esta experiencia compartida conecta a comunidades afrodescendientes en América, el Caribe y otras partes del mundo, creando identidades diaspóricas ricas y diversas.",
   },
   {
     word: "PANAFRICANISMO",
-    definition: "Movimiento de unidad y solidaridad africana",
+    definition: "Unidad y solidaridad de pueblos africanos",
     explanation: "El panafricanismo es un movimiento político, cultural e ideológico que promueve la unidad y solidaridad entre todos los pueblos de ascendencia africana. Busca fortalecer los lazos entre África y sus diásporas, luchando contra el racismo y promoviendo la autodeterminación y el desarrollo de las comunidades negras.",
+  },
+  {
+    word: "NEGRITUD",
+    definition: "Movimiento de afirmación de la identidad negra",
+    explanation: "La Negritud es un movimiento literario y filosófico desarrollado por intelectuales negros como Aimé Césaire y Léopold Sédar Senghor. Afirma el valor de la cultura negra, rechaza la asimilación y celebra la identidad africana y afrodescendiente como fuente de orgullo y resistencia.",
+  },
+  {
+    word: "AFROCENTRISMO",
+    definition: "Enfoque centrado en la experiencia africana",
+    explanation: "El afrocentrismo es una perspectiva intelectual y cultural que coloca a África y las experiencias africanas en el centro del análisis histórico y cultural. Busca descolonizar el conocimiento y reconocer las contribuciones de los pueblos africanos a la civilización mundial.",
+  },
+  {
+    word: "REPRESENTACIÓN",
+    definition: "Visibilidad y presencia en medios y cultura",
+    explanation: "La representación se refiere a cómo las personas afrodescendientes son visibilizadas en medios, arte, política y cultura. Una representación auténtica y diversa es crucial para combatir estereotipos, construir identidades positivas y garantizar que las voces negras sean escuchadas y respetadas.",
+  },
+  {
+    word: "IDENTIDAD",
+    definition: "Construcción del ser afrodescendiente",
+    explanation: "La identidad afrodescendiente es un proceso dinámico de construcción que integra historia, cultura, territorio y experiencias compartidas. No es estática sino que se construye colectivamente, resistiendo a la negación histórica y afirmando la existencia, el valor y el futuro de las comunidades negras.",
+  },
+  {
+    word: "MEMORIA",
+    definition: "Preservación de la historia oral y ancestral",
+    explanation: "La memoria en las comunidades afrodescendientes es una tecnología de resistencia que preserva historias, tradiciones y conocimientos ancestrales a través de la oralidad, la música, la danza y las prácticas culturales. Es fundamental para mantener viva la conexión con África y construir futuros basados en la sabiduría ancestral.",
+  },
+  {
+    word: "TERRITORIO",
+    definition: "Espacios de vida y resistencia afro",
+    explanation: "El territorio para las comunidades afrodescendientes no es solo espacio físico, sino lugar de vida, resistencia y construcción de identidad. En Colombia, los territorios colectivos del Pacífico y el Caribe son espacios donde se preservan tradiciones, se ejercen derechos ancestrales y se construyen proyectos de vida autónomos.",
   },
 ];
 
-const GRID_SIZE = 18;
+const GRID_SIZE = 20; // Aumentado para acomodar más palabras
 
 // Generar cuadrícula con palabras colocadas
 function generateGrid(): { grid: string[][]; positions: WordPosition[] } {
@@ -194,8 +229,6 @@ export default function SopaDeLetrasPage() {
   const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
   const [showModal, setShowModal] = useState(false);
   const [currentWord, setCurrentWord] = useState<WordDefinition | null>(null);
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
 
   const resetGame = () => {
     const newState = generateGrid();
@@ -251,75 +284,49 @@ export default function SopaDeLetrasPage() {
     [positions, foundWords]
   );
 
-  const handleCellMouseDown = (row: number, col: number) => {
-    setIsSelecting(true);
-    setStartCell({ row, col });
-    setSelectedCells(new Set([getCellKey(row, col)]));
+  // Click simple para seleccionar/deseleccionar letras (como estaba antes),
+  // y chequear si se ha completado una palabra al actualizar la selección.
+  const handleCellClick = (row: number, col: number) => {
+    const key = getCellKey(row, col);
+    setSelectedCells((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+
+      const foundWord = checkWord(next);
+      if (foundWord) {
+        const wordDef = WORDS.find((w) => w.word === foundWord);
+        if (wordDef) {
+          setFoundWords((prevFound) => new Set([...prevFound, foundWord]));
+          setCurrentWord(wordDef);
+          setShowModal(true);
+
+          // Opcional: limpiar la selección de esa palabra (ya se marca como encontrada)
+          const pos = positions.find((p) => p.word === foundWord);
+          if (pos) {
+            for (let i = 0; i < foundWord.length; i++) {
+              let r = pos.row;
+              let c = pos.col;
+              if (pos.direction === "horizontal") {
+                c = pos.col + i;
+              } else if (pos.direction === "vertical") {
+                r = pos.row + i;
+              } else if (pos.direction === "diagonal") {
+                r = pos.row + i;
+                c = pos.col + i;
+              }
+              next.delete(getCellKey(r, c));
+            }
+          }
+        }
+      }
+
+      return new Set(next);
+    });
   };
-
-  const handleCellMouseEnter = (row: number, col: number) => {
-    if (!isSelecting || !startCell) return;
-
-    const newSelected = new Set<string>();
-    const minRow = Math.min(startCell.row, row);
-    const maxRow = Math.max(startCell.row, row);
-    const minCol = Math.min(startCell.col, col);
-    const maxCol = Math.max(startCell.col, col);
-
-    // Determinar dirección
-    const rowDiff = row - startCell.row;
-    const colDiff = col - startCell.col;
-    const isDiagonal = Math.abs(rowDiff) === Math.abs(colDiff);
-    const isHorizontal = rowDiff === 0;
-    const isVertical = colDiff === 0;
-
-    if (isDiagonal) {
-      const steps = Math.abs(rowDiff);
-      const rowStep = rowDiff > 0 ? 1 : -1;
-      const colStep = colDiff > 0 ? 1 : -1;
-      for (let i = 0; i <= steps; i++) {
-        newSelected.add(
-          getCellKey(startCell.row + i * rowStep, startCell.col + i * colStep)
-        );
-      }
-    } else if (isHorizontal) {
-      for (let c = minCol; c <= maxCol; c++) {
-        newSelected.add(getCellKey(startCell.row, c));
-      }
-    } else if (isVertical) {
-      for (let r = minRow; r <= maxRow; r++) {
-        newSelected.add(getCellKey(r, startCell.col));
-      }
-    } else {
-      newSelected.add(getCellKey(startCell.row, startCell.col));
-    }
-
-    setSelectedCells(newSelected);
-  };
-
-  const handleCellMouseUp = () => {
-    if (!isSelecting) return;
-    setIsSelecting(false);
-
-    const foundWord = checkWord(selectedCells);
-    if (foundWord) {
-      const wordDef = WORDS.find((w) => w.word === foundWord);
-      if (wordDef) {
-        setFoundWords((prev) => new Set([...prev, foundWord]));
-        setCurrentWord(wordDef);
-        setShowModal(true);
-      }
-    }
-
-    setSelectedCells(new Set());
-    setStartCell(null);
-  };
-
-  useEffect(() => {
-    const handleMouseUp = () => handleCellMouseUp();
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => window.removeEventListener("mouseup", handleMouseUp);
-  }, [selectedCells, isSelecting]);
 
   const allFound = foundWords.size === WORDS.length;
 
@@ -387,14 +394,13 @@ export default function SopaDeLetrasPage() {
                         <button
                           key={j}
                           type="button"
-                          onMouseDown={() => handleCellMouseDown(i, j)}
-                          onMouseEnter={() => handleCellMouseEnter(i, j)}
-                          className={`flex h-7 w-7 items-center justify-center rounded border text-xs transition sm:h-8 sm:w-8 sm:text-sm ${
+                          onClick={() => handleCellClick(i, j)}
+                          className={`flex h-7 w-7 items-center justify-center rounded border text-xs font-medium transition-all duration-150 sm:h-8 sm:w-8 sm:text-sm ${
                             isFound
-                              ? "border-[#D4AF37]/70 bg-[#D4AF37]/30 text-[#D4AF37] line-through"
+                              ? "border-[#D4AF37]/70 bg-[#D4AF37]/30 text-[#D4AF37] line-through opacity-60"
                               : isSelected
-                              ? "border-[#D4AF37]/70 bg-[#D4AF37]/20 text-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.4)]"
-                              : "border-white/10 bg-white/5 text-zinc-200 hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 hover:text-[#D4AF37]"
+                              ? "border-[#D4AF37] bg-[#D4AF37]/25 text-[#D4AF37] shadow-[0_0_12px_rgba(212,175,55,0.5)] scale-105"
+                              : "border-white/10 bg-white/5 text-zinc-200 hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] hover:scale-105"
                           }`}
                         >
                           {cell}
