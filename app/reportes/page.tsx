@@ -43,10 +43,10 @@ export default function ReportesPage() {
   };
 
   // Calcular datos para gráficas
-  const referrerEntries = Object.entries(stats.referrers).sort(([, a], [, b]) => b - a);
+  const referrerEntries = Object.entries(stats.referrers || {}).sort(([, a], [, b]) => b - a);
   const maxDuration = Math.max(...stats.viewStats.map(v => v.totalDuration), 1);
   const maxInteractions = Math.max(...stats.viewStats.map(v => v.totalInteractions), 1);
-  const totalReferrers = Object.values(stats.referrers).reduce((a, b) => a + b, 0);
+  const totalReferrers = Object.values(stats.referrers || {}).reduce((a, b) => a + b, 0);
 
   return (
     <div className="flex flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8 md:px-8 lg:px-12 lg:py-10">
@@ -80,6 +80,146 @@ export default function ReportesPage() {
           Análisis ejecutivo de interacciones, tiempo en cada vista y comportamiento de usuarios en NERA.
         </motion.p>
       </header>
+
+      {/* Gráficas administrativas - Torta y Barras */}
+      <div className="mb-6 grid gap-4 lg:grid-cols-2">
+        {/* Gráfica de torta - Origen de Tráfico */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
+        >
+          <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
+            <Globe className="h-4 w-4 text-[#D4AF37]" />
+            Distribución de Tráfico (Gráfica de Torta)
+          </h2>
+          {referrerEntries.length === 0 ? (
+            <div className="flex h-52 items-center justify-center">
+              <p className="text-sm text-zinc-500">No hay datos de referrers aún.</p>
+            </div>
+          ) : (
+            <>
+              <div className="relative mx-auto h-52 w-52">
+                <svg 
+                  viewBox="0 0 100 100" 
+                  className="h-full w-full transform -rotate-90"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  {referrerEntries.map(([ref, count], idx) => {
+                    if (totalReferrers === 0) return null;
+                    
+                    const startAngle = referrerEntries.slice(0, idx).reduce((sum, [, c]) => sum + (c / totalReferrers) * 360, 0);
+                    const angle = (count / totalReferrers) * 360;
+                    const largeArc = angle > 180 ? 1 : 0;
+                    
+                    // Convertir ángulos a radianes y calcular puntos
+                    const startRad = (startAngle * Math.PI) / 180;
+                    const endRad = ((startAngle + angle) * Math.PI) / 180;
+                    
+                    const x1 = 50 + 40 * Math.cos(startRad);
+                    const y1 = 50 + 40 * Math.sin(startRad);
+                    const x2 = 50 + 40 * Math.cos(endRad);
+                    const y2 = 50 + 40 * Math.sin(endRad);
+                    
+                    const colors = [
+                      "#F97316", // naranja vivo
+                      "#22C55E", // verde
+                      "#3B82F6", // azul
+                      "#EAB308", // amarillo
+                      "#EC4899", // rosa
+                      "#A855F7", // púrpura
+                      "#06B6D4", // cian
+                    ];
+                    
+                    return (
+                      <path
+                        key={`${ref}-${idx}`}
+                        d={`M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArc} 1 ${x2} ${y2} Z`}
+                        fill={colors[idx % colors.length]}
+                        opacity={0.9}
+                        stroke="#000"
+                        strokeWidth="0.3"
+                      />
+                    );
+                  })}
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <p className="text-[10px] font-semibold text-zinc-300">Total visitas</p>
+                  <p className="text-xl font-bold text-[#F97316]">{totalReferrers}</p>
+                </div>
+              </div>
+              {/* Leyenda */}
+              <div className="mt-4 space-y-2">
+                {referrerEntries.slice(0, 5).map(([ref, count], idx) => {
+                  const percentage = totalReferrers > 0 ? (count / totalReferrers) * 100 : 0;
+                const colors = [
+                  "#F97316",
+                  "#22C55E",
+                  "#3B82F6",
+                  "#EAB308",
+                  "#EC4899",
+                ];
+                  return (
+                    <div key={`legend-${idx}`} className="flex items-center gap-2 text-xs">
+                      <div
+                        className="h-3 w-3 shrink-0 rounded-full"
+                        style={{ backgroundColor: colors[idx % colors.length] }}
+                      />
+                      <span className="flex-1 truncate text-zinc-300" title={ref}>
+                        {ref.length > 25 ? `${ref.substring(0, 25)}...` : ref}
+                      </span>
+                      <span className="text-zinc-400 shrink-0">{count} ({percentage.toFixed(1)}%)</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </motion.section>
+
+        {/* Gráfica de barras - Tiempo por Vista */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
+        >
+          <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
+            <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
+            Tiempo por Vista (Barras)
+          </h2>
+          <div className="space-y-3">
+            {stats.viewStats.length === 0 ? (
+              <p className="text-sm text-zinc-500">No hay datos de tiempo aún.</p>
+            ) : (
+              stats.viewStats.map((view, idx) => {
+                const percentage = (view.totalDuration / maxDuration) * 100;
+                return (
+                  <div key={idx} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-medium text-zinc-200">{view.viewName}</span>
+                      <span className="text-zinc-400">{formatDuration(view.totalDuration)}</span>
+                    </div>
+                    <div className="h-3 overflow-hidden rounded-full bg-white/5">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percentage}%` }}
+                        transition={{ duration: 0.6, delay: idx * 0.1 }}
+                        className="h-full bg-gradient-to-r from-[#D4AF37]/60 to-[#D4AF37]"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-zinc-500">
+                      <span>{view.visits} visita{view.visits !== 1 ? "s" : ""}</span>
+                      <span>Promedio: {formatDuration(view.avgDuration)}</span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </motion.section>
+      </div>
 
       {/* Resumen general - Tiles principales */}
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -166,95 +306,13 @@ export default function ReportesPage() {
         </motion.div>
       </div>
 
-      {/* Origen de Tráfico - Tile compacto */}
-      <motion.section
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-        className="mb-6 rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
-      >
-        <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold text-zinc-100">
-          <Globe className="h-3.5 w-3.5 text-[#D4AF37]" />
-          Origen de Tráfico
-        </h2>
-        <div className="space-y-2">
-          {referrerEntries.length === 0 ? (
-            <p className="text-xs text-zinc-500">No hay datos de referrers aún.</p>
-          ) : (
-            referrerEntries.slice(0, 5).map(([ref, count], idx) => {
-              const percentage = totalReferrers > 0 ? (count / totalReferrers) * 100 : 0;
-              return (
-                <div key={idx} className="space-y-1">
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="truncate text-zinc-200" title={ref}>
-                      {ref.length > 30 ? `${ref.substring(0, 30)}...` : ref}
-                    </span>
-                    <span className="text-zinc-400 font-medium">{count}</span>
-                  </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${percentage}%` }}
-                      transition={{ duration: 0.6, delay: idx * 0.05 }}
-                      className="h-full bg-[#D4AF37]"
-                    />
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </motion.section>
-
-      {/* Gráficas administrativas */}
-      <div className="mb-6 grid gap-6 lg:grid-cols-2">
-        {/* Gráfica de tiempo por vista */}
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
-        >
-          <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
-            <Clock className="h-4 w-4 text-[#D4AF37]" />
-            Tiempo por Vista
-          </h2>
-          <div className="space-y-3">
-            {stats.viewStats.length === 0 ? (
-              <p className="text-sm text-zinc-500">No hay datos de tiempo aún.</p>
-            ) : (
-              stats.viewStats.map((view, idx) => {
-                const percentage = (view.totalDuration / maxDuration) * 100;
-                return (
-                  <div key={idx} className="space-y-1.5">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-medium text-zinc-200">{view.viewName}</span>
-                      <span className="text-zinc-400">{formatDuration(view.totalDuration)}</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-white/5">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${percentage}%` }}
-                        transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="h-full bg-gradient-to-r from-[#D4AF37]/60 to-[#D4AF37]"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-zinc-500">
-                      <span>{view.visits} visita{view.visits !== 1 ? "s" : ""}</span>
-                      <span>Promedio: {formatDuration(view.avgDuration)}</span>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </motion.section>
-
+      {/* Gráficas administrativas - Interacciones */}
+      <div className="mb-6 grid gap-6 lg:grid-cols-1">
         {/* Gráfica de interacciones por vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
+          transition={{ delay: 0.2 }}
           className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
         >
           <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
