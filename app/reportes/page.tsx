@@ -83,7 +83,7 @@ export default function ReportesPage() {
 
       {/* Gráficas administrativas - Torta y Barras */}
       <div className="mb-6 grid gap-4 lg:grid-cols-2">
-        {/* Gráfica de torta - Origen de Tráfico */}
+        {/* Gráfica de torta - Distribución de Tiempo por Vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,12 +91,12 @@ export default function ReportesPage() {
           className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
         >
           <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
-            <Globe className="h-4 w-4 text-[#D4AF37]" />
-            Distribución de Tráfico (Gráfica de Torta)
+            <Clock className="h-4 w-4 text-[#D4AF37]" />
+            Distribución de Tiempo por Vista
           </h2>
-          {referrerEntries.length === 0 ? (
+          {stats.viewStats.length === 0 ? (
             <div className="flex h-52 items-center justify-center">
-              <p className="text-sm text-zinc-500">No hay datos de referrers aún.</p>
+              <p className="text-sm text-zinc-500">No hay datos de vistas aún.</p>
             </div>
           ) : (
             <>
@@ -106,11 +106,12 @@ export default function ReportesPage() {
                   className="h-full w-full transform -rotate-90"
                   preserveAspectRatio="xMidYMid meet"
                 >
-                  {referrerEntries.map(([ref, count], idx) => {
-                    if (totalReferrers === 0) return null;
+                  {stats.viewStats.map((view, idx) => {
+                    const totalTime = stats.viewStats.reduce((sum, v) => sum + v.totalDuration, 0);
+                    if (totalTime === 0) return null;
                     
-                    const startAngle = referrerEntries.slice(0, idx).reduce((sum, [, c]) => sum + (c / totalReferrers) * 360, 0);
-                    const angle = (count / totalReferrers) * 360;
+                    const startAngle = stats.viewStats.slice(0, idx).reduce((sum, v) => sum + (v.totalDuration / totalTime) * 360, 0);
+                    const angle = (view.totalDuration / totalTime) * 360;
                     const largeArc = angle > 180 ? 1 : 0;
                     
                     // Convertir ángulos a radianes y calcular puntos
@@ -134,7 +135,7 @@ export default function ReportesPage() {
                     
                     return (
                       <path
-                        key={`${ref}-${idx}`}
+                        key={`${view.viewName}-${idx}`}
                         d={`M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArc} 1 ${x2} ${y2} Z`}
                         fill={colors[idx % colors.length]}
                         opacity={0.9}
@@ -145,31 +146,32 @@ export default function ReportesPage() {
                   })}
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <p className="text-[10px] font-semibold text-zinc-300">Total visitas</p>
-                  <p className="text-xl font-bold text-[#F97316]">{totalReferrers}</p>
+                  <p className="text-[10px] font-semibold text-zinc-300">Tiempo total</p>
+                  <p className="text-xl font-bold text-[#F97316]">{formatDuration(stats.totalDuration)}</p>
                 </div>
               </div>
               {/* Leyenda */}
               <div className="mt-4 space-y-2">
-                {referrerEntries.slice(0, 5).map(([ref, count], idx) => {
-                  const percentage = totalReferrers > 0 ? (count / totalReferrers) * 100 : 0;
-                const colors = [
-                  "#F97316",
-                  "#22C55E",
-                  "#3B82F6",
-                  "#EAB308",
-                  "#EC4899",
-                ];
+                {stats.viewStats.slice(0, 5).map((view, idx) => {
+                  const totalTime = stats.viewStats.reduce((sum, v) => sum + v.totalDuration, 0);
+                  const percentage = totalTime > 0 ? (view.totalDuration / totalTime) * 100 : 0;
+                  const colors = [
+                    "#F97316",
+                    "#22C55E",
+                    "#3B82F6",
+                    "#EAB308",
+                    "#EC4899",
+                  ];
                   return (
                     <div key={`legend-${idx}`} className="flex items-center gap-2 text-xs">
                       <div
                         className="h-3 w-3 shrink-0 rounded-full"
                         style={{ backgroundColor: colors[idx % colors.length] }}
                       />
-                      <span className="flex-1 truncate text-zinc-300" title={ref}>
-                        {ref.length > 25 ? `${ref.substring(0, 25)}...` : ref}
+                      <span className="flex-1 truncate text-zinc-300" title={view.viewName}>
+                        {view.viewName.length > 20 ? `${view.viewName.substring(0, 20)}...` : view.viewName}
                       </span>
-                      <span className="text-zinc-400 shrink-0">{count} ({percentage.toFixed(1)}%)</span>
+                      <span className="text-zinc-400 shrink-0">{formatDuration(view.totalDuration)} ({percentage.toFixed(1)}%)</span>
                     </div>
                   );
                 })}
@@ -178,7 +180,7 @@ export default function ReportesPage() {
           )}
         </motion.section>
 
-        {/* Gráfica de barras - Tiempo por Vista */}
+        {/* Gráfica de barras - Interacciones por Vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -186,32 +188,32 @@ export default function ReportesPage() {
           className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
         >
           <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
-            <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
-            Tiempo por Vista (Barras)
+            <MousePointerClick className="h-4 w-4 text-[#D4AF37]" />
+            Interacciones por Vista (Barras)
           </h2>
           <div className="space-y-3">
             {stats.viewStats.length === 0 ? (
-              <p className="text-sm text-zinc-500">No hay datos de tiempo aún.</p>
+              <p className="text-sm text-zinc-500">No hay datos de interacciones aún.</p>
             ) : (
               stats.viewStats.map((view, idx) => {
-                const percentage = (view.totalDuration / maxDuration) * 100;
+                const percentage = (view.totalInteractions / maxInteractions) * 100;
                 return (
                   <div key={idx} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-medium text-zinc-200">{view.viewName}</span>
-                      <span className="text-zinc-400">{formatDuration(view.totalDuration)}</span>
+                      <span className="text-zinc-400 font-semibold">{view.totalInteractions}</span>
                     </div>
                     <div className="h-3 overflow-hidden rounded-full bg-white/5">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${percentage}%` }}
                         transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="h-full bg-gradient-to-r from-[#D4AF37]/60 to-[#D4AF37]"
+                        className="h-full bg-gradient-to-r from-[#F97316]/80 to-[#F97316]"
                       />
                     </div>
                     <div className="flex items-center justify-between text-[10px] text-zinc-500">
                       <span>{view.visits} visita{view.visits !== 1 ? "s" : ""}</span>
-                      <span>Promedio: {formatDuration(view.avgDuration)}</span>
+                      <span>Promedio: {Math.round(view.totalInteractions / view.visits)} por visita</span>
                     </div>
                   </div>
                 );
