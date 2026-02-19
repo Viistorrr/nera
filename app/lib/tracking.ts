@@ -302,9 +302,27 @@ export function getAggregatedStats() {
     referrers[ref] = (referrers[ref] || 0) + 1;
   });
   
+  // Calcular usuarios únicos (basado en userAgent + location como identificador único)
+  const uniqueUsers = new Set<string>();
+  const userVisitCounts: Record<string, number> = {};
+  
+  data.views.forEach(view => {
+    // Crear identificador único basado en userAgent y location
+    const userIdentifier = `${view.userAgent || "unknown"}_${view.location || "unknown"}`;
+    uniqueUsers.add(userIdentifier);
+    userVisitCounts[userIdentifier] = (userVisitCounts[userIdentifier] || 0) + 1;
+  });
+  
+  // Detectar usuarios que volvieron (más de una vista)
+  const returningUsers = Object.values(userVisitCounts).filter(count => count > 1).length;
+  
+  const uniqueVisitsCount = uniqueUsers ? uniqueUsers.size : 0;
+
   return {
     sessionId: data.sessionId,
     totalViews: data.views.length,
+    uniqueVisits: uniqueVisitsCount,
+    returningUsers,
     totalDuration: data.totalDuration,
     totalInteractions: data.totalInteractions,
     viewStats: Object.values(viewStats),

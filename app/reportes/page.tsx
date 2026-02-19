@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, RefreshCw, MapPin } from "lucide-react";
-import { getAggregatedStats, clearTrackingData, type ViewInteraction } from "../lib/tracking";
+import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, MapPin, Users, Repeat } from "lucide-react";
+import { getAggregatedStats, type ViewInteraction } from "../lib/tracking";
 
 type Stats = ReturnType<typeof getAggregatedStats>;
 
@@ -23,12 +23,6 @@ export default function ReportesPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleClear = () => {
-    if (confirm("¿Estás seguro de que quieres limpiar todos los datos de tracking?")) {
-      clearTrackingData();
-      loadStats();
-    }
-  };
 
   if (!stats) {
     return (
@@ -48,8 +42,11 @@ export default function ReportesPage() {
     return `${seconds}s`;
   };
 
+  // Calcular datos para gráficas
+  const referrerEntries = Object.entries(stats.referrers).sort(([, a], [, b]) => b - a);
   const maxDuration = Math.max(...stats.viewStats.map(v => v.totalDuration), 1);
   const maxInteractions = Math.max(...stats.viewStats.map(v => v.totalInteractions), 1);
+  const totalReferrers = Object.values(stats.referrers).reduce((a, b) => a + b, 0);
 
   return (
     <div className="flex flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8 md:px-8 lg:px-12 lg:py-10">
@@ -66,20 +63,13 @@ export default function ReportesPage() {
             </div>
             <div>
               <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-zinc-500">
-                Insights & Reportes
+                Insights & Reportes Administrativos
               </p>
               <h1 className="text-xl font-semibold text-zinc-100 sm:text-2xl">
-                Reportes de Interacción
+                Dashboard Ejecutivo · NERA
               </h1>
             </div>
           </div>
-          <button
-            onClick={handleClear}
-            className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-xs text-zinc-400 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Limpiar datos
-          </button>
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}
@@ -87,12 +77,12 @@ export default function ReportesPage() {
           transition={{ duration: 0.35, delay: 0.05 }}
           className="mt-3 text-sm text-zinc-400"
         >
-          Análisis de interacciones, tiempo en cada vista y comportamiento de usuarios en NERA.
+          Análisis ejecutivo de interacciones, tiempo en cada vista y comportamiento de usuarios en NERA.
         </motion.p>
       </header>
 
-      {/* Resumen general */}
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Resumen general - Tiles principales */}
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,14 +90,12 @@ export default function ReportesPage() {
           className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-2 text-zinc-400">
-            <Globe className="h-4 w-4" />
-            <p className="text-[10px] font-mono uppercase tracking-[0.18em]">Sesión</p>
+            <Users className="h-4 w-4" />
+            <p className="text-[10px] font-mono uppercase tracking-[0.18em]">Visitas Únicas</p>
           </div>
-          <p className="mt-2 text-lg font-semibold text-zinc-100">
-            {stats.sessionId.split("_")[1] ? new Date(parseInt(stats.sessionId.split("_")[1])).toLocaleDateString() : "N/A"}
-          </p>
-          <p className="mt-1 text-[11px] text-zinc-500 font-mono">
-            {stats.sessionId.substring(0, 20)}...
+          <p className="mt-2 text-2xl font-semibold text-[#D4AF37]">{stats.uniqueVisits}</p>
+          <p className="mt-1 text-[11px] text-zinc-500">
+            de {stats.totalViews} totales
           </p>
         </motion.div>
 
@@ -115,6 +103,22 @@ export default function ReportesPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
+          className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
+        >
+          <div className="flex items-center gap-2 text-zinc-400">
+            <Repeat className="h-4 w-4" />
+            <p className="text-[10px] font-mono uppercase tracking-[0.18em]">Usuarios Recurrentes</p>
+          </div>
+          <p className="mt-2 text-2xl font-semibold text-[#D4AF37]">{stats.returningUsers}</p>
+          <p className="mt-1 text-[11px] text-zinc-500">
+            {stats.uniqueVisits > 0 ? Math.round((stats.returningUsers / stats.uniqueVisits) * 100) : 0}% del total
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-2 text-zinc-400">
@@ -130,7 +134,7 @@ export default function ReportesPage() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.25 }}
           className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-2 text-zinc-400">
@@ -148,7 +152,7 @@ export default function ReportesPage() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
+          transition={{ delay: 0.3 }}
           className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-2 text-zinc-400">
@@ -162,12 +166,53 @@ export default function ReportesPage() {
         </motion.div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Origen de Tráfico - Tile compacto */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className="mb-6 rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
+      >
+        <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold text-zinc-100">
+          <Globe className="h-3.5 w-3.5 text-[#D4AF37]" />
+          Origen de Tráfico
+        </h2>
+        <div className="space-y-2">
+          {referrerEntries.length === 0 ? (
+            <p className="text-xs text-zinc-500">No hay datos de referrers aún.</p>
+          ) : (
+            referrerEntries.slice(0, 5).map(([ref, count], idx) => {
+              const percentage = totalReferrers > 0 ? (count / totalReferrers) * 100 : 0;
+              return (
+                <div key={idx} className="space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="truncate text-zinc-200" title={ref}>
+                      {ref.length > 30 ? `${ref.substring(0, 30)}...` : ref}
+                    </span>
+                    <span className="text-zinc-400 font-medium">{count}</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${percentage}%` }}
+                      transition={{ duration: 0.6, delay: idx * 0.05 }}
+                      className="h-full bg-[#D4AF37]"
+                    />
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </motion.section>
+
+      {/* Gráficas administrativas */}
+      <div className="mb-6 grid gap-6 lg:grid-cols-2">
         {/* Gráfica de tiempo por vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
           className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
         >
           <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
@@ -209,7 +254,7 @@ export default function ReportesPage() {
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
+          transition={{ delay: 0.45 }}
           className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
         >
           <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
@@ -246,107 +291,64 @@ export default function ReportesPage() {
             )}
           </div>
         </motion.section>
-
-        {/* Origen de tráfico */}
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
-        >
-          <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
-            <Globe className="h-4 w-4 text-[#D4AF37]" />
-            Origen de Tráfico
-          </h2>
-          <div className="space-y-2">
-            {Object.keys(stats.referrers).length === 0 ? (
-              <p className="text-sm text-zinc-500">No hay datos de referrers aún.</p>
-            ) : (
-              Object.entries(stats.referrers)
-                .sort(([, a], [, b]) => b - a)
-                .map(([ref, count], idx) => {
-                  const maxRef = Math.max(...Object.values(stats.referrers));
-                  const percentage = (count / maxRef) * 100;
-                  return (
-                    <div key={idx} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="truncate text-zinc-200" title={ref}>
-                          {ref.length > 40 ? `${ref.substring(0, 40)}...` : ref}
-                        </span>
-                        <span className="text-zinc-400">{count}</span>
-                      </div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${percentage}%` }}
-                          transition={{ duration: 0.6, delay: idx * 0.05 }}
-                          className="h-full bg-[#D4AF37]"
-                        />
-                      </div>
-                    </div>
-                  );
-                })
-            )}
-          </div>
-        </motion.section>
-
-        {/* Lista detallada de vistas */}
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
-          className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
-        >
-          <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
-            <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
-            Historial de Vistas
-          </h2>
-          <div className="max-h-[400px] space-y-2 overflow-y-auto pr-1">
-            {stats.views.length === 0 ? (
-              <p className="text-sm text-zinc-500">No hay historial de vistas aún.</p>
-            ) : (
-              stats.views
-                .slice()
-                .reverse()
-                .map((view, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedView(view)}
-                    className="w-full rounded-lg border border-white/10 bg-white/[0.02] p-3 text-left transition hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs font-semibold text-zinc-100">{view.viewName}</p>
-                        <p className="mt-0.5 text-[10px] text-zinc-400">{view.path}</p>
-                        <div className="mt-2 flex flex-wrap items-center gap-3 text-[10px] text-zinc-500">
-                          {view.duration && (
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {formatDuration(view.duration)}
-                            </span>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <MousePointerClick className="h-3 w-3" />
-                            {view.interactions} clicks
-                          </span>
-                          {view.location && (
-                            <span className="flex items-center gap-1 text-[#D4AF37]">
-                              <MapPin className="h-3 w-3" />
-                              {view.location}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-[10px] text-zinc-600">
-                        {new Date(view.startTime).toLocaleTimeString()}
-                      </div>
-                    </div>
-                  </button>
-                ))
-            )}
-          </div>
-        </motion.section>
       </div>
+
+      {/* Historial de Vistas */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
+      >
+        <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
+          <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
+          Historial Detallado de Vistas
+        </h2>
+        <div className="max-h-[400px] space-y-2 overflow-y-auto pr-1">
+          {stats.views.length === 0 ? (
+            <p className="text-sm text-zinc-500">No hay historial de vistas aún.</p>
+          ) : (
+            stats.views
+              .slice()
+              .reverse()
+              .map((view, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedView(view)}
+                  className="w-full rounded-lg border border-white/10 bg-white/[0.02] p-3 text-left transition hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-zinc-100">{view.viewName}</p>
+                      <p className="mt-0.5 text-[10px] text-zinc-400">{view.path}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-[10px] text-zinc-500">
+                        {view.duration && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {formatDuration(view.duration)}
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1">
+                          <MousePointerClick className="h-3 w-3" />
+                          {view.interactions} clicks
+                        </span>
+                        {view.location && (
+                          <span className="flex items-center gap-1 text-[#D4AF37]">
+                            <MapPin className="h-3 w-3" />
+                            {view.location}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-[10px] text-zinc-600">
+                      {new Date(view.startTime).toLocaleTimeString()}
+                    </div>
+                  </div>
+                </button>
+              ))
+          )}
+        </div>
+      </motion.section>
 
       {/* Modal de detalle de vista */}
       {selectedView && (
