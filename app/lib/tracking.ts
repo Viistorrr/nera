@@ -10,6 +10,7 @@ export type ViewInteraction = {
   referrer?: string;
   location?: string;
   userAgent?: string;
+  deviceType?: "desktop" | "mobile" | "tablet";
 };
 
 export type SessionData = {
@@ -51,6 +52,30 @@ function getViewName(path: string): string {
   };
   
   return viewMap[path] || path;
+}
+
+// Detectar tipo de dispositivo
+function getDeviceType(): "desktop" | "mobile" | "tablet" {
+  if (typeof window === "undefined") return "desktop";
+  
+  const userAgent = navigator.userAgent.toLowerCase();
+  const width = window.innerWidth;
+  
+  // Detectar móvil
+  if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)) {
+    if (width < 768) {
+      return "mobile";
+    } else if (width < 1024) {
+      return "tablet";
+    }
+  }
+  
+  // Detectar tablet por tamaño de pantalla
+  if (width >= 768 && width < 1024) {
+    return "tablet";
+  }
+  
+  return "desktop";
 }
 
 // Obtener nombre de ciudad desde la ubicación (geolocalización por IP)
@@ -169,6 +194,7 @@ export function startViewTracking(path: string): void {
         referrer: document.referrer || "Directo",
         location,
         userAgent: navigator.userAgent,
+        deviceType: getDeviceType(),
       };
       
       data.views.push(newView);
@@ -302,6 +328,13 @@ export function getAggregatedStats() {
     referrers[ref] = (referrers[ref] || 0) + 1;
   });
   
+  // Dispositivos
+  const devices: Record<string, number> = {};
+  data.views.forEach(view => {
+    const device = view.deviceType || "desktop";
+    devices[device] = (devices[device] || 0) + 1;
+  });
+  
   // Calcular usuarios únicos (basado en userAgent + location como identificador único)
   const uniqueUsers = new Set<string>();
   const userVisitCounts: Record<string, number> = {};
@@ -327,6 +360,7 @@ export function getAggregatedStats() {
     totalInteractions: data.totalInteractions,
     viewStats: Object.values(viewStats),
     referrers,
+    devices,
     views: data.views,
   };
 }

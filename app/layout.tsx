@@ -3,6 +3,7 @@ import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "./components/AppShell";
 import { TrackingProvider } from "./components/TrackingProvider";
+import { FeedbackModal } from "./components/FeedbackModal";
 import Script from "next/script";
 
 const spaceGrotesk = Space_Grotesk({
@@ -41,6 +42,7 @@ export default function RootLayout({
           </Script>
         <TrackingProvider>
           <AppShell>{children}</AppShell>
+          <FeedbackModal />
         </TrackingProvider>
       </body>
     </html>

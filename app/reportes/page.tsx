@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, MapPin, Users, Repeat } from "lucide-react";
+import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, MapPin, Users, Repeat, Monitor, Smartphone, Tablet } from "lucide-react";
 import { getAggregatedStats, type ViewInteraction } from "../lib/tracking";
 
 type Stats = ReturnType<typeof getAggregatedStats>;
@@ -308,6 +308,107 @@ export default function ReportesPage() {
         </motion.div>
       </div>
 
+      {/* Origen de Tráfico y Dispositivos */}
+      <div className="mb-6 grid gap-4 md:grid-cols-2">
+        {/* Origen de Tráfico */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
+        >
+          <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold text-zinc-100">
+            <Globe className="h-3.5 w-3.5 text-[#D4AF37]" />
+            Origen de Tráfico
+          </h2>
+          <div className="space-y-2">
+            {referrerEntries.length === 0 ? (
+              <p className="text-xs text-zinc-500">No hay datos de referrers aún.</p>
+            ) : (
+              referrerEntries.slice(0, 5).map(([ref, count], idx) => {
+                const percentage = totalReferrers > 0 ? (count / totalReferrers) * 100 : 0;
+                return (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="truncate text-zinc-200" title={ref}>
+                        {ref.length > 30 ? `${ref.substring(0, 30)}...` : ref}
+                      </span>
+                      <span className="text-zinc-400 font-medium">{count}</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percentage}%` }}
+                        transition={{ duration: 0.6, delay: idx * 0.05 }}
+                        className="h-full bg-[#D4AF37]"
+                      />
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </motion.section>
+
+        {/* Dispositivos */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl"
+        >
+          <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold text-zinc-100">
+            <Monitor className="h-3.5 w-3.5 text-[#D4AF37]" />
+            Dispositivos
+          </h2>
+          <div className="space-y-2">
+            {Object.keys(stats.devices || {}).length === 0 ? (
+              <p className="text-xs text-zinc-500">No hay datos de dispositivos aún.</p>
+            ) : (
+              Object.entries(stats.devices || {})
+                .sort(([, a], [, b]) => b - a)
+                .map(([device, count], idx) => {
+                  const totalDevices = Object.values(stats.devices || {}).reduce((a, b) => a + b, 0);
+                  const percentage = totalDevices > 0 ? (count / totalDevices) * 100 : 0;
+                  const deviceIcons = {
+                    desktop: Monitor,
+                    mobile: Smartphone,
+                    tablet: Tablet,
+                  };
+                  const deviceLabels = {
+                    desktop: "Desktop",
+                    mobile: "Móvil",
+                    tablet: "Tablet",
+                  };
+                  const Icon = deviceIcons[device as keyof typeof deviceIcons] || Monitor;
+                  
+                  return (
+                    <div key={idx} className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-1.5">
+                          <Icon className="h-3 w-3 text-[#D4AF37]" />
+                          <span className="text-zinc-200 capitalize">
+                            {deviceLabels[device as keyof typeof deviceLabels] || device}
+                          </span>
+                        </div>
+                        <span className="text-zinc-400 font-medium">{count}</span>
+                      </div>
+                      <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${percentage}%` }}
+                          transition={{ duration: 0.6, delay: idx * 0.05 }}
+                          className="h-full bg-[#D4AF37]"
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+            )}
+          </div>
+        </motion.section>
+      </div>
+
       {/* Gráficas administrativas - Interacciones */}
       <div className="mb-6 grid gap-6 lg:grid-cols-1">
         {/* Gráfica de interacciones por vista */}
@@ -460,6 +561,17 @@ export default function ReportesPage() {
                 </p>
                 <p className="mt-1 text-zinc-100">{selectedView.location || "Ubicación desconocida"}</p>
               </div>
+              {selectedView.deviceType && (
+                <div>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500 flex items-center gap-1">
+                    <Monitor className="h-3 w-3" />
+                    Dispositivo
+                  </p>
+                  <p className="mt-1 text-zinc-100 capitalize">
+                    {selectedView.deviceType === "mobile" ? "Móvil" : selectedView.deviceType === "tablet" ? "Tablet" : "Desktop"}
+                  </p>
+                </div>
+              )}
               <div>
                 <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Hora de inicio</p>
                 <p className="mt-1 text-zinc-100">
