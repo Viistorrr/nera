@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "./components/AppShell";
+import { TrackingProvider } from "./components/TrackingProvider";
 import Script from "next/script";
 
 const spaceGrotesk = Space_Grotesk({
@@ -38,7 +39,9 @@ export default function RootLayout({
             gtag('config', 'G-VR93V6T75P');
           `}
           </Script>
-        <AppShell>{children}</AppShell>
+        <TrackingProvider>
+          <AppShell>{children}</AppShell>
+        </TrackingProvider>
       </body>
     </html>
   );

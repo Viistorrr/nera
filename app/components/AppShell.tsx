@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Menu,
   X,
+  BarChart3,
 } from "lucide-react";
 
 const navItems = [
@@ -26,6 +27,7 @@ const navItems = [
   },
   { id: "05", label: "AI_Lab", icon: FlaskConical },
   { id: "06", label: "Knowledge_Base", icon: BookText },
+  { id: "07", label: "Reportes", icon: BarChart3, href: "/reportes" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
