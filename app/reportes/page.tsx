@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, RefreshCw } from "lucide-react";
+import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, RefreshCw, MapPin } from "lucide-react";
 import { getAggregatedStats, clearTrackingData, type ViewInteraction } from "../lib/tracking";
 
 type Stats = ReturnType<typeof getAggregatedStats>;
@@ -318,7 +318,7 @@ export default function ReportesPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-semibold text-zinc-100">{view.viewName}</p>
                         <p className="mt-0.5 text-[10px] text-zinc-400">{view.path}</p>
-                        <div className="mt-2 flex flex-wrap gap-3 text-[10px] text-zinc-500">
+                        <div className="mt-2 flex flex-wrap items-center gap-3 text-[10px] text-zinc-500">
                           {view.duration && (
                             <span className="flex items-center gap-1">
                               <Clock className="h-3 w-3" />
@@ -329,6 +329,12 @@ export default function ReportesPage() {
                             <MousePointerClick className="h-3 w-3" />
                             {view.interactions} clicks
                           </span>
+                          {view.location && (
+                            <span className="flex items-center gap-1 text-[#D4AF37]">
+                              <MapPin className="h-3 w-3" />
+                              {view.location}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="text-[10px] text-zinc-600">
@@ -386,8 +392,11 @@ export default function ReportesPage() {
                 <p className="mt-1 text-zinc-100">{selectedView.referrer || "Directo"}</p>
               </div>
               <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Ubicación</p>
-                <p className="mt-1 text-zinc-100">{selectedView.location || "Desconocido"}</p>
+                <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500 flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  Ciudad / Ubicación
+                </p>
+                <p className="mt-1 text-zinc-100">{selectedView.location || "Ubicación desconocida"}</p>
               </div>
               <div>
                 <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Hora de inicio</p>

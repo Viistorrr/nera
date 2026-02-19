@@ -53,28 +53,90 @@ function getViewName(path: string): string {
   return viewMap[path] || path;
 }
 
-// Obtener ubicación aproximada (IP básico o geolocalización)
+// Obtener nombre de ciudad desde la ubicación (geolocalización por IP)
 async function getLocation(): Promise<string> {
   try {
-    // Intentar obtener geolocalización
+    // Primero intentar obtener ciudad por IP (más rápido y no requiere permisos)
+    try {
+      const ipResponse = await fetch("https://ipapi.co/json/", {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+        },
+      });
+      
+      if (ipResponse.ok) {
+        const ipData = await ipResponse.json();
+        if (ipData.city && ipData.region) {
+          return `${ipData.city}, ${ipData.region}`;
+        } else if (ipData.city) {
+          return ipData.city;
+        } else if (ipData.country_name) {
+          return ipData.country_name;
+        }
+      }
+    } catch (ipError) {
+      // Si falla la API de IP, intentar con otra API
+      try {
+        const altResponse = await fetch("https://ip-api.com/json/?fields=city,regionName,country", {
+          method: "GET",
+        });
+        
+        if (altResponse.ok) {
+          const altData = await altResponse.json();
+          if (altData.city && altData.regionName) {
+            return `${altData.city}, ${altData.regionName}`;
+          } else if (altData.city) {
+            return altData.city;
+          } else if (altData.country) {
+            return altData.country;
+          }
+        }
+      } catch (altError) {
+        // Continuar con geolocalización del navegador
+      }
+    }
+
+    // Como fallback, intentar geolocalización del navegador y hacer reverse geocoding
     if (navigator.geolocation) {
       return new Promise((resolve) => {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
-            resolve(`${position.coords.latitude.toFixed(2)}, ${position.coords.longitude.toFixed(2)}`);
+          async (position) => {
+            try {
+              // Reverse geocoding para obtener nombre de ciudad
+              const reverseResponse = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=es`
+              );
+              
+              if (reverseResponse.ok) {
+                const reverseData = await reverseResponse.json();
+                if (reverseData.city && reverseData.principalSubdivision) {
+                  resolve(`${reverseData.city}, ${reverseData.principalSubdivision}`);
+                } else if (reverseData.city) {
+                  resolve(reverseData.city);
+                } else if (reverseData.locality) {
+                  resolve(reverseData.locality);
+                } else {
+                  resolve("Ubicación desconocida");
+                }
+              } else {
+                resolve("Ubicación desconocida");
+              }
+            } catch {
+              resolve("Ubicación desconocida");
+            }
           },
           () => {
-            // Si falla, usar IP básico o "Desconocido"
-            resolve("Desconocido");
+            resolve("Ubicación desconocida");
           },
-          { timeout: 2000 }
+          { timeout: 3000, enableHighAccuracy: false }
         );
       });
     }
   } catch {
     // Silenciar errores
   }
-  return "Desconocido";
+  return "Ubicación desconocida";
 }
 
 // Inicializar tracking de vista
