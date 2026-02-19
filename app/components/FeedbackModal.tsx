@@ -107,7 +107,7 @@ export function FeedbackModal() {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ type: "spring", duration: 0.4 }}
             onClick={handleOpenModal}
-            className="fixed bottom-4 right-4 z-[100] flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#D4AF37]/60 bg-[#D4AF37]/10 shadow-lg backdrop-blur-sm transition hover:scale-110 hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]"
+            className="fixed bottom-3 right-3 z-[100] flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#D4AF37]/60 bg-[#D4AF37]/10 shadow-lg backdrop-blur-sm transition hover:scale-110 hover:bg-[#D4AF37]/20 hover:border-[#D4AF37] sm:bottom-4 sm:right-4 sm:h-16 sm:w-16"
             aria-label="Dar feedback"
           >
             {/* Efecto de brillo titilante - anillo exterior */}
@@ -140,7 +140,7 @@ export function FeedbackModal() {
               }}
               className="absolute inset-0 rounded-full bg-[#D4AF37]/5"
             />
-            <MessageSquare className="relative h-8 w-8 text-[#D4AF37]" />
+            <MessageSquare className="relative h-6 w-6 text-[#D4AF37] sm:h-8 sm:w-8" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -161,7 +161,7 @@ export function FeedbackModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.4 }}
-            className="fixed bottom-4 right-4 z-[100] w-[90%] max-w-sm rounded-2xl border border-[#D4AF37]/50 bg-black/95 p-5 shadow-2xl backdrop-blur-xl sm:p-6"
+            className="fixed bottom-3 right-3 z-[100] w-[calc(100%-1.5rem)] max-w-sm rounded-xl border border-[#D4AF37]/50 bg-black/95 p-4 shadow-2xl backdrop-blur-xl sm:bottom-4 sm:right-4 sm:rounded-2xl sm:p-5 md:p-6"
           >
             <button
               onClick={handleClose}

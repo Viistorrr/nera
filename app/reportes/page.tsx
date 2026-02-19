@@ -112,7 +112,7 @@ export default function ReportesPage() {
       </header>
 
       {/* Gráficas administrativas - Torta y Barras */}
-      <div className="mb-6 grid gap-4 lg:grid-cols-2">
+      <div className="mb-4 grid gap-4 sm:mb-6 lg:grid-cols-2">
         {/* Gráfica de torta - Distribución de Tiempo por Vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
@@ -254,7 +254,7 @@ export default function ReportesPage() {
       </div>
 
       {/* Resumen general - Tiles principales */}
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mb-4 grid gap-3 sm:mb-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -440,7 +440,7 @@ export default function ReportesPage() {
       </div>
 
       {/* Gráficas administrativas - Interacciones */}
-      <div className="mb-6 grid gap-6 lg:grid-cols-1">
+      <div className="mb-4 grid gap-4 sm:mb-6 lg:grid-cols-1 lg:gap-6">
         {/* Gráfica de interacciones por vista */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}

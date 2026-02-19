@@ -245,7 +245,7 @@ export default function MemoriaPage() {
               Forma parejas conectando conceptos con sus definiciones. Historia, representación y cultura negra.
             </p>
             
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4">
               <AnimatePresence>
                 {cards.map((card) => (
                   <motion.button
@@ -257,7 +257,7 @@ export default function MemoriaPage() {
                     whileTap={!card.isFlipped && !card.isMatched ? { scale: 0.95 } : {}}
                     onClick={() => handleCardClick(card.id)}
                     disabled={card.isFlipped || card.isMatched || isChecking}
-                    className={`relative h-24 sm:h-28 md:h-32 overflow-hidden rounded-xl border transition-all duration-300 ${
+                    className={`relative h-20 overflow-hidden rounded-lg border transition-all duration-300 sm:h-24 sm:rounded-xl md:h-28 lg:h-32 ${
                       card.isMatched
                         ? "border-[#D4AF37]/70 bg-[#D4AF37]/20 opacity-60 cursor-default"
                         : card.isFlipped
@@ -384,7 +384,7 @@ export default function MemoriaPage() {
           )}
         </div>
 
-        <aside className="w-full space-y-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-left text-sm text-zinc-300 backdrop-blur-xl sm:p-6 lg:w-1/3">
+        <aside className="w-full space-y-3 rounded-xl border border-white/10 bg-black/40 p-3 text-left text-xs text-zinc-300 backdrop-blur-xl sm:rounded-2xl sm:p-4 sm:text-sm md:p-6 lg:w-1/3">
           <p className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-500">
             <Lightbulb className="h-3 w-3 text-[#D4AF37]" />
             Pistas · Conceptos y definiciones

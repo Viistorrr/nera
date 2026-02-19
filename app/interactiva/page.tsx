@@ -75,7 +75,7 @@ export default function InteractivaPage() {
         </motion.p>
       </header>
 
-      <section className="grid gap-5 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6 xl:grid-cols-3">
         {gameCards.map((card, index) => {
           const Icon = card.icon;
           const isAvailable = true;
@@ -98,7 +98,7 @@ export default function InteractivaPage() {
               >
                 <motion.article
                   whileHover={isAvailable ? { y: -4 } : undefined}
-                  className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-5 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55 min-w-0 h-full flex flex-col"
+                  className="group relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] p-4 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-colors hover:border-[#D4AF37]/55 min-w-0 h-full flex flex-col sm:p-5"
                 >
                   <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="absolute -inset-32 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.16),_transparent_60%)]" />

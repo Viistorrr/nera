@@ -367,7 +367,7 @@ export default function SopaDeLetrasPage() {
               Encuentra las palabras: horizontal, vertical y diagonal
             </p>
             <div className="mx-auto max-w-full overflow-x-auto">
-              <div className="inline-flex flex-col items-center justify-center gap-0.5 font-mono text-sm font-medium text-zinc-300 sm:text-base">
+              <div className="inline-flex flex-col items-center justify-center gap-0.5 font-mono text-xs font-medium text-zinc-300 sm:text-sm md:text-base">
                 {grid.map((row, i) => (
                   <div key={i} className="flex justify-center gap-0.5">
                     {row.map((cell, j) => {
@@ -395,7 +395,7 @@ export default function SopaDeLetrasPage() {
                           key={j}
                           type="button"
                           onClick={() => handleCellClick(i, j)}
-                          className={`flex h-7 w-7 items-center justify-center rounded border text-xs font-medium transition-all duration-150 sm:h-8 sm:w-8 sm:text-sm ${
+                          className={`flex h-6 w-6 items-center justify-center rounded border text-[10px] font-medium transition-all duration-150 sm:h-7 sm:w-7 sm:text-xs md:h-8 md:w-8 md:text-sm ${
                             isFound
                               ? "border-[#D4AF37]/70 bg-[#D4AF37]/30 text-[#D4AF37] line-through opacity-60"
                               : isSelected
@@ -440,7 +440,7 @@ export default function SopaDeLetrasPage() {
         </motion.section>
 
         {/* Lista de palabras a encontrar */}
-        <aside className="w-full space-y-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-left text-sm text-zinc-300 backdrop-blur-xl sm:p-6 lg:w-64">
+        <aside className="w-full space-y-2 rounded-xl border border-white/10 bg-black/40 p-3 text-left text-xs text-zinc-300 backdrop-blur-xl sm:space-y-3 sm:rounded-2xl sm:p-4 sm:text-sm md:p-6 lg:w-64">
           <p className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-500">
             <Search className="h-3 w-3 text-[#D4AF37]" />
             Palabras a encontrar

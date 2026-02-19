@@ -93,12 +93,12 @@ export default function CrucigramasPage() {
         transition={{ duration: 0.3 }}
         className="flex flex-1 flex-col gap-6 lg:flex-row"
       >
-        <div className="w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-center backdrop-blur-xl sm:p-6 lg:w-2/3">
-          <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-500">
+        <div className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-center backdrop-blur-xl sm:rounded-2xl sm:p-4 md:p-6 lg:w-2/3">
+          <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.15em] text-zinc-500 sm:mb-3 sm:text-[11px] sm:tracking-[0.2em]">
             Palabras: CIMARRON · KILOMBO · NEGROOVERSO · INDEPENDENCIA · PANAFRICANISMO
           </p>
-          <div className="mx-auto max-w-full overflow-x-auto">
-            <div className="inline-grid grid-cols-[repeat(15,1.8rem)] gap-[0.12rem] sm:grid-cols-[repeat(15,2rem)]">
+          <div className="mx-auto max-w-full overflow-x-auto pb-2">
+            <div className="inline-grid grid-cols-[repeat(15,1.5rem)] gap-[0.1rem] sm:grid-cols-[repeat(15,1.8rem)] sm:gap-[0.12rem] md:grid-cols-[repeat(15,2rem)]">
               {SOLUTION_GRID.map((row, rowIndex) =>
                 row.split("").map((ch, colIndex) => {
                   const isBlock = ch === "#";
@@ -106,7 +106,7 @@ export default function CrucigramasPage() {
                     return (
                       <div
                         key={`${rowIndex}-${colIndex}`}
-                        className="h-7 w-7 rounded-[0.35rem] bg-zinc-900/90 sm:h-8 sm:w-8"
+                        className="h-6 w-6 rounded-[0.3rem] bg-zinc-900/90 sm:h-7 sm:w-7 sm:rounded-[0.35rem] md:h-8 md:w-8"
                       />
                     );
                   }
@@ -122,7 +122,7 @@ export default function CrucigramasPage() {
                         handleChange(rowIndex, colIndex, e.target.value)
                       }
                       maxLength={1}
-                      className={`h-7 w-7 rounded-[0.35rem] border bg-black/60 text-center text-xs font-semibold uppercase text-zinc-100 outline-none transition focus:border-[#D4AF37]/60 focus:bg-black/80 sm:h-8 sm:w-8 sm:text-sm ${
+                      className={`h-6 w-6 rounded-[0.3rem] border bg-black/60 text-center text-[10px] font-semibold uppercase text-zinc-100 outline-none transition focus:border-[#D4AF37]/60 focus:bg-black/80 sm:h-7 sm:w-7 sm:rounded-[0.35rem] sm:text-xs md:h-8 md:w-8 md:text-sm ${
                         value
                           ? correct
                             ? "border-emerald-500/70"
@@ -135,19 +135,19 @@ export default function CrucigramasPage() {
               )}
             </div>
           </div>
-          <p className="mt-3 text-[11px] text-zinc-500">
+          <p className="mt-2 text-[10px] text-zinc-500 sm:mt-3 sm:text-[11px]">
             Escribe letras en las casillas blancas. Verde = letra correcta, rojo = incorrecta.
           </p>
           <button
             type="button"
             onClick={fillSolution}
-            className="mt-4 inline-flex items-center justify-center rounded-full border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-4 py-1.5 text-[11px] font-mono uppercase tracking-[0.2em] text-[#D4AF37] transition hover:bg-[#D4AF37]/20"
+            className="mt-3 inline-flex items-center justify-center rounded-full border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.15em] text-[#D4AF37] transition hover:bg-[#D4AF37]/20 sm:mt-4 sm:px-4 sm:py-1.5 sm:text-[11px] sm:tracking-[0.2em]"
           >
             Mostrar solución
           </button>
         </div>
 
-        <div className="w-full space-y-3 rounded-2xl border border-white/10 bg-black/40 p-4 text-left text-sm text-zinc-300 backdrop-blur-xl sm:p-6 lg:w-1/3">
+        <div className="w-full space-y-2 rounded-xl border border-white/10 bg-black/40 p-3 text-left text-xs text-zinc-300 backdrop-blur-xl sm:space-y-3 sm:rounded-2xl sm:p-4 sm:text-sm md:p-6 lg:w-1/3">
           <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-500">
             Pistas
           </p>

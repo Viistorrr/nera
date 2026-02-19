@@ -13,21 +13,23 @@ import {
   Menu,
   X,
   BarChart3,
+  Info,
 } from "lucide-react";
 
 const navItems = [
   { id: "01", label: "Dashboard", icon: LayoutDashboard, href: "/" },
-  { id: "02", label: "Interactiva", icon: Gamepad2, href: "/interactiva" },
-  { id: "03", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
+  { id: "02", label: "Quiénes Somos", icon: Info, href: "/quienes-somos" },
+  { id: "03", label: "Interactiva", icon: Gamepad2, href: "/interactiva" },
+  { id: "04", label: "En el tiempo...", icon: Calendar, href: "/en-el-tiempo" },
   {
-    id: "04",
+    id: "05",
     label: "Marketplace de Servicios",
     icon: BriefcaseBusiness,
     href: "/marketplace",
   },
-  { id: "05", label: "AI_Lab", icon: FlaskConical },
-  { id: "06", label: "Knowledge_Base", icon: BookText },
-  { id: "07", label: "Reportes", icon: BarChart3, href: "/reportes" },
+  { id: "06", label: "AI_Lab", icon: FlaskConical },
+  { id: "07", label: "Knowledge_Base", icon: BookText },
+  { id: "08", label: "Reportes", icon: BarChart3, href: "/reportes" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -54,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         type="button"
         onClick={() => setMenuOpen(true)}
         aria-label="Abrir menú"
-        className="fixed left-3 top-3 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-black/90 text-zinc-300 shadow-lg backdrop-blur-xl transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] sm:left-4 sm:top-4 lg:hidden"
+        className="fixed left-2 top-2 z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/90 text-zinc-300 shadow-lg backdrop-blur-xl transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] sm:left-3 sm:top-3 sm:h-11 sm:w-11 lg:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -72,8 +74,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Sidebar: en lg siempre visible; en móvil/tablet panel deslizante con transform */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between border-r border-white/5 bg-black/95 px-4 py-6 shadow-2xl backdrop-blur-xl
+          fixed inset-y-0 left-0 z-40 flex w-[85%] max-w-xs flex-col justify-between border-r border-white/5 bg-black/95 px-3 py-4 shadow-2xl backdrop-blur-xl
           transition-transform duration-300 ease-out
+          sm:w-72 sm:px-4 sm:py-6
           lg:relative lg:z-auto lg:w-60 lg:translate-x-0 lg:shadow-none
           ${menuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
@@ -104,7 +107,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
 
-          <nav className="mt-6 space-y-1 text-sm lg:mt-0">
+          <nav className="mt-4 space-y-1 text-sm sm:mt-6 lg:mt-0">
             {navItems.map((item) => {
               const Icon = item.icon;
               const href = "href" in item ? item.href : undefined;
@@ -113,7 +116,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 : false;
 
               const baseClass =
-                "group flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition " +
+                "group flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition sm:gap-3 sm:px-3 sm:py-2.5 " +
                 (isActive
                   ? "border-[#D4AF37]/40 bg-[#D4AF37]/5 text-zinc-50 shadow-[0_0_30px_rgba(212,175,55,0.15)]"
                   : "border-white/5 bg-white/0 text-zinc-400 hover:border-[#D4AF37]/40 hover:bg-white/5 hover:text-zinc-50");
@@ -126,8 +129,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     onClick={closeMenu}
                     className={baseClass}
                   >
-                    <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37]" />
-                    <span className="text-xs font-medium tracking-wide">
+                    <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37] sm:h-4" />
+                    <span className="text-[11px] font-medium tracking-wide sm:text-xs">
                       {item.label}
                     </span>
                   </Link>
@@ -141,8 +144,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   onClick={closeMenu}
                   className={baseClass}
                 >
-                  <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37]" />
-                  <span className="text-xs font-medium tracking-wide">
+                  <Icon className="h-4 w-4 shrink-0 text-zinc-500 group-hover:text-[#D4AF37] sm:h-4" />
+                  <span className="text-[11px] font-medium tracking-wide sm:text-xs">
                     {item.label}
                   </span>
                 </button>
@@ -163,7 +166,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Área principal: margen izquierdo en móvil para no quedar bajo el botón hamburguesa; en lg el sidebar ocupa espacio normal */}
-      <main className="flex min-h-screen flex-1 flex-col pl-14 pt-2 sm:pl-16 lg:pl-0 lg:pt-0">
+      <main className="flex min-h-screen flex-1 flex-col pl-12 pt-2 sm:pl-14 sm:pt-2 lg:pl-0 lg:pt-0">
         {children}
       </main>
     </div>

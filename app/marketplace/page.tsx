@@ -61,7 +61,7 @@ export default function MarketplacePage() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:gap-4 md:grid-cols-2 lg:gap-5 xl:grid-cols-3">
           {services.map((svc, index) => (
             <Link key={svc.id} href={`/nodo/${svc.id}`}>
               <motion.article

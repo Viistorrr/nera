@@ -19,8 +19,8 @@ const WorldMap3D = dynamic(
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col px-6 py-8 sm:px-8 lg:px-12 lg:py-10">
-      <header className="flex flex-col items-center gap-6 border-b border-white/5 pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+    <div className="flex flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8 md:px-8 lg:px-12 lg:py-10">
+      <header className="flex flex-col items-center gap-4 border-b border-white/5 pb-6 text-center sm:gap-6 sm:pb-8 lg:flex-row lg:items-end lg:justify-between lg:text-left">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,10 +35,10 @@ export default function Home() {
             autoFocus
             type="text"
             placeholder="preguntale a NERA..."
-            className="w-full rounded-full border border-white/10 bg-black/60 px-4 py-3 pl-10 pr-24 text-sm text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] outline-none ring-0 placeholder:text-zinc-600 transition focus:border-[#D4AF37]/60 focus:bg-black/80"
+            className="w-full rounded-full border border-white/10 bg-black/60 px-3 py-2.5 pl-9 pr-20 text-xs text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] outline-none ring-0 placeholder:text-zinc-600 transition focus:border-[#D4AF37]/60 focus:bg-black/80 sm:px-4 sm:py-3 sm:pl-10 sm:pr-24 sm:text-sm"
           />
 
-          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center gap-1 rounded-full border border-white/5 bg-white/5 px-2 text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-400">
+          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center gap-0.5 rounded-full border border-white/5 bg-white/5 px-1.5 text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 sm:right-3 sm:gap-1 sm:px-2 sm:text-[10px] sm:tracking-[0.24em]">
             <span>Ctrl</span>
             <span>K</span>
           </div>
@@ -55,14 +55,14 @@ export default function Home() {
             NERA · Estable
           </p>
 
-          <h1 className="text-2xl font-semibold leading-tight sm:text-3xl md:text-[2.1rem]">
+          <h1 className="text-xl font-semibold leading-tight sm:text-2xl md:text-3xl lg:text-[2.1rem]">
             Bienvenid@ a la{" "}
             <span className="bg-gradient-to-r from-[#D4AF37] via-zinc-50 to-[#D4AF37] bg-clip-text text-transparent">
               enciclopedia del negrooverso 
             </span>
           </h1>
 
-          <p className="text-sm text-zinc-400">
+          <p className="text-xs leading-relaxed text-zinc-400 sm:text-sm">
             Neural Ecosystem &amp; Repository Assistant coordinando proyectos, conocimiento y
             trazas de tu universo creativo. Toda una herramienta central construyendo identidad, conocimiento y educación.
           </p>
@@ -73,14 +73,14 @@ export default function Home() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.08 }}
-        className="mt-8 flex flex-col gap-6 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-4 shadow-[0_0_60px_rgba(0,0,0,0.4)] sm:mt-10 sm:p-6 lg:flex-row"
+        className="mt-6 flex flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-3 shadow-[0_0_60px_rgba(0,0,0,0.4)] sm:mt-8 sm:gap-6 sm:p-4 md:p-6 lg:flex-row"
       >
         <div className="w-full lg:w-1/2">
-          <WorldMap3D className="h-[260px] w-full sm:h-[320px] md:h-[360px] lg:h-[380px]" />
+          <WorldMap3D className="h-[200px] w-full sm:h-[260px] md:h-[320px] lg:h-[360px] xl:h-[380px]" />
         </div>
 
         <div className="flex w-full items-center lg:w-1/2">
-          <div className="space-y-3 text-left text-sm text-zinc-400">
+          <div className="space-y-2 text-left text-xs text-zinc-400 sm:space-y-3 sm:text-sm">
             <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-zinc-500">
               Cartografía del Negrooverso
             </p>
@@ -122,7 +122,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:gap-4 md:grid-cols-2 lg:gap-5 xl:grid-cols-3">
           {knowledgeCards.map((card, index) => (
             <Link key={card.id} href={`/nodo/${card.id}`}>
               <motion.article
