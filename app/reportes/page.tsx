@@ -2,24 +2,54 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, MapPin, Users, Repeat, Monitor, Smartphone, Tablet } from "lucide-react";
+import { BarChart3, Clock, MousePointerClick, Globe, TrendingUp, X, MapPin, Users, Repeat, Monitor, Smartphone, Tablet, MessageSquare, Star } from "lucide-react";
 import { getAggregatedStats, type ViewInteraction } from "../lib/tracking";
 
 type Stats = ReturnType<typeof getAggregatedStats>;
 
+interface FeedbackData {
+  feedback: string;
+  rating: number;
+  timestamp: number;
+  userAgent: string;
+}
+
+// Función helper para obtener feedbacks del localStorage
+function getFeedbacks(): FeedbackData[] {
+  if (typeof window === "undefined") return [];
+  const stored = localStorage.getItem("nera_feedback_data");
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
 export default function ReportesPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [selectedView, setSelectedView] = useState<ViewInteraction | null>(null);
+  const [feedbacks, setFeedbacks] = useState<FeedbackData[]>([]);
 
   const loadStats = () => {
     const data = getAggregatedStats();
     setStats(data);
   };
 
+  const loadFeedbacks = () => {
+    const data = getFeedbacks();
+    // Ordenar por timestamp descendente (más recientes primero)
+    setFeedbacks(data.sort((a, b) => b.timestamp - a.timestamp));
+  };
+
   useEffect(() => {
     loadStats();
+    loadFeedbacks();
     // Recargar cada 2 segundos para datos en tiempo real
-    const interval = setInterval(loadStats, 2000);
+    const interval = setInterval(() => {
+      loadStats();
+      loadFeedbacks();
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -507,6 +537,93 @@ export default function ReportesPage() {
                   </div>
                 </button>
               ))
+          )}
+        </div>
+      </motion.section>
+
+      {/* Lista de Feedbacks */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55 }}
+        className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-xl sm:p-6"
+      >
+        <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-100">
+          <MessageSquare className="h-4 w-4 text-[#D4AF37]" />
+          Feedbacks Recibidos
+          {feedbacks.length > 0 && (
+            <span className="ml-2 rounded-full bg-[#D4AF37]/20 px-2 py-0.5 text-xs font-medium text-[#D4AF37]">
+              {feedbacks.length}
+            </span>
+          )}
+        </h2>
+        <div className="max-h-[500px] space-y-3 overflow-y-auto pr-1">
+          {feedbacks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <MessageSquare className="mb-2 h-8 w-8 text-zinc-600" />
+              <p className="text-sm text-zinc-500">No hay feedbacks recibidos aún.</p>
+              <p className="mt-1 text-xs text-zinc-600">
+                Los feedbacks aparecerán aquí cuando los usuarios los envíen.
+              </p>
+            </div>
+          ) : (
+            feedbacks.map((feedbackItem, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="rounded-lg border border-white/10 bg-white/[0.02] p-4 transition hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-2 flex items-center gap-2">
+                      {feedbackItem.rating > 0 && (
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`h-3.5 w-3.5 ${
+                                star <= feedbackItem.rating
+                                  ? "fill-[#D4AF37] text-[#D4AF37]"
+                                  : "text-zinc-600"
+                              }`}
+                            />
+                          ))}
+                          <span className="ml-1 text-xs font-medium text-zinc-400">
+                            {feedbackItem.rating}/5
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    {feedbackItem.feedback.trim() && (
+                      <p className="mb-2 text-sm text-zinc-200 leading-relaxed">
+                        {feedbackItem.feedback}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap items-center gap-3 text-[10px] text-zinc-500">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {new Date(feedbackItem.timestamp).toLocaleString("es-ES", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                      {feedbackItem.userAgent && (
+                        <span className="truncate max-w-[200px]" title={feedbackItem.userAgent}>
+                          {feedbackItem.userAgent.length > 50
+                            ? `${feedbackItem.userAgent.substring(0, 50)}...`
+                            : feedbackItem.userAgent}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))
           )}
         </div>
       </motion.section>
