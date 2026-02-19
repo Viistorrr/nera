@@ -38,7 +38,7 @@ const gameCards = [
     badge: "Memoria",
     title: "Parejas",
     description: "Voltea las tarjetas y forma parejas. Refuerza conceptos del ecosistema.",
-    meta: "Próximamente",
+    meta: "Interactivo · 12 parejas",
     icon: Grid3X3,
   },
 ];
@@ -78,7 +78,7 @@ export default function InteractivaPage() {
       <section className="grid gap-5 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
         {gameCards.map((card, index) => {
           const Icon = card.icon;
-          const isAvailable = card.slug !== "memoria";
+          const isAvailable = true;
 
           return (
             <motion.div
